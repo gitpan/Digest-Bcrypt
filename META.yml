@@ -1,0 +1,29 @@
+---
+abstract: 'Perl interface to the bcrypt algorithm'
+author:
+  - 'James Aitken <jaitken@cpan.org>'
+build_requires:
+  Digest: 0
+  Test::More: 0
+  warnings: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.30
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.300011, CPAN::Meta::Converter version 2.120630'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Digest-Bcrypt
+requires:
+  Carp: 0
+  Crypt::Eksblowfish::Bcrypt: 0
+  Digest::base: 0
+  bytes: 0
+  parent: 0
+  perl: 5.006
+  strict: 0
+resources:
+  bugtracker: https://github.com/LoonyPandora/Digest-Bcrypt/issues
+  repository: git://github.com/LoonyPandora/Digest-Bcrypt.git
+version: 0.1.0
