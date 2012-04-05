@@ -53,7 +53,7 @@ use parent 'Digest::base';
 use Carp qw(croak);
 use Crypt::Eksblowfish::Bcrypt qw(bcrypt_hash en_base64);
 
-our $VERSION = '0.1.0';
+our $VERSION = '0.1.1';
 
 =head1 METHODS
 
@@ -61,7 +61,7 @@ The object-oriented interface to C<Digest::Bcrypt> is mostly
 identical to that of L<Digest>, with a few additions.
 
 Notably you B<must> set a C<salt> exactly 16 octets in length,
-and you must provide a C<cost> in the range C<'1'..'31'>
+and you B<must> provide a C<cost> in the range C<'1'..'31'>.
 
 =head2 new
 
@@ -84,24 +84,6 @@ sub new {
 }
 
 
-=head2 clone
-
-    my $bcrypt->clone;
-
-Creates a clone of the C<Digest::Bcrypt> object, and returns it.
-
-=cut
-
-sub clone {
-    my $self = shift;
-
-    return bless {
-        cost    => $self->cost,
-        salt    => $self->salt,
-        _buffer => $self->{_buffer},
-    }, ref($self);
-}
-
 =head2 add
 
     $bcrypt->add("a"); $bcrypt->add("b"); $bcrypt->add("c");
@@ -122,6 +104,62 @@ sub add {
 
     return $self;
 }
+
+
+=head2 salt
+
+    $bcrypt->salt($salt);
+
+Sets the value to be used as a salt. Bcrypt requires B<exactly> 16 octets of salt
+
+It is recommenced that you use a module like L<Data::Entropy::Algorithms> to
+provide a truly randomised salt.
+
+When called with no arguments, will return the whatever is the current salt
+
+=cut
+
+sub salt {
+    my ($self, $salt) = @_;
+
+    if (defined $salt) {
+        $self->_check_salt($salt);
+
+        $self->{salt} = $salt;
+        return $self;
+    }
+
+    return $self->{salt};
+}
+
+
+=head2 cost
+
+    $bcrypt->cost($cost);
+
+An integer in the range C<'1'..'31'>, this is required.
+
+See L<Crypt::Eksblowfish::Bcrypt> for a detailed description of C<cost>
+in the context of the bcrypt algorithm.
+
+When called with no arguments, will return the current cost
+
+=cut
+
+sub cost {
+    my ($self, $cost) = @_;
+
+    if (defined $cost) {
+        $self->_check_cost($cost);
+
+        # bcrypt requires 2 digit costs, it dies if it's a single digit.
+        $self->{cost} = sprintf("%02d", $cost);
+        return $self;
+    }
+
+    return $self->{cost};
+}
+
 
 =head2 digest
 
@@ -146,7 +184,7 @@ sub digest {
 
 Same as L</"digest">, but will return the digest in hexadecimal form.
 
-The C<length> of the returned string will be 42 and will only contain
+The C<length> of the returned string will be 46 and will only contain
 characters from the ranges C<'0'..'9'> and C<'a'..'f'>.
 
 =cut
@@ -154,7 +192,7 @@ characters from the ranges C<'0'..'9'> and C<'a'..'f'>.
 
 =head2 b64digest
 
-    $bcrypt->hexdigest;
+    $bcrypt->b64digest;
 
 Same as L</"digest">, but will return the digest base64 encoded.
 
@@ -175,6 +213,24 @@ sub b64digest {
 }
 
 
+=head2 clone
+
+    my $bcrypt->clone;
+
+Creates a clone of the C<Digest::Bcrypt> object, and returns it.
+
+=cut
+
+sub clone {
+    my $self = shift;
+
+    return bless {
+        cost    => $self->cost,
+        salt    => $self->salt,
+        _buffer => $self->{_buffer},
+    }, ref($self);
+}
+
 
 =head2 reset
 
@@ -194,67 +250,14 @@ sub reset {
     return $self->new;
 }
 
-=head2 salt
-
-    $bcrypt->salt($salt);
-
-Sets the value to be used as a salt. Bcrypt requires B<exactly> 16 octets of salt
-
-It is recommenced that you use a module like L<Data::Entropy::Algorithms> to
-provide a truly randomised salt.
-
-When called with no arguments, will return the whatever is the current salt
-
-=cut
-
-sub salt {
-    my ($self, $salt) = @_;
-
-    if ($salt) {        
-        use bytes;
-        if (length $salt != 16) {
-            croak "Salt must be exactly 16 octets long";
-        }
-
-        $self->{salt} = $salt;
-        return $self;
-    }
-
-    return $self->{salt};
-}
-
-=head2 cost
-
-    $bcrypt->cost($cost);
-
-An integer in the range C<'1'..'31'>, this is required.
-
-See L<Crypt::Eksblowfish::Bcrypt> for a detailed description of C<cost>
-in the context of the bcrypt algorithm.
-
-When called with no arguments, will return the current cost
-
-=cut
-
-sub cost {
-    my ($self, $cost) = @_;
-
-    if ($cost) {
-        if ($cost !~ /^\d+$/ || $cost > 31 || $cost < 1) {
-            croak "Cost must be an integer between 1 and 31";
-        }
-
-        $self->{cost} = sprintf("%02d", $cost);;
-        return $self;
-    }
-
-    return $self->{cost};
-}
 
 
 # Returns the raw bcrypt digest and resets the object
 sub _digest {
     my $self = shift;
+
+    $self->_check_cost;
+    $self->_check_salt;
 
     my $hash = bcrypt_hash({
         key_nul => 1,
@@ -266,6 +269,33 @@ sub _digest {
 
     return $hash;
 }
+
+
+# Checks that the cost is an integer in the range 1-31. Croaks if it isn't
+sub _check_cost {
+    my ($self, $cost) = @_;
+
+    $cost //= $self->cost;
+
+    if (!defined $cost || $cost !~ /^\d+$/ || ($cost < 1 || $cost > 31)) {
+        croak "Cost must be an integer between 1 and 31";
+    }
+}
+
+
+# Checks that the salt exactly 16 octets long. Croaks if it isn't
+sub _check_salt {
+    my ($self, $salt) = @_;
+
+    $salt //= $self->salt;
+
+    use bytes;
+    if (!defined $salt || length $salt != 16) {
+        croak "Salt must be exactly 16 octets long";
+    }
+    no bytes;
+}
+
 
 1;
 

@@ -9,7 +9,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300011, CPAN::Meta::Converter version 2.120630'
+generated_by: 'Dist::Zilla version 4.300013, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -21,9 +21,9 @@ requires:
   Digest::base: 0
   bytes: 0
   parent: 0
-  perl: 5.006
+  perl: 5.010
   strict: 0
 resources:
   bugtracker: https://github.com/LoonyPandora/Digest-Bcrypt/issues
   repository: git://github.com/LoonyPandora/Digest-Bcrypt.git
-version: 0.1.0
+version: 0.1.1

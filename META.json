@@ -1,0 +1,54 @@
+{
+   "abstract" : "Perl interface to the bcrypt algorithm",
+   "author" : [
+      "James Aitken <jaitken@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300013, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Digest-Bcrypt",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "Crypt::Eksblowfish::Bcrypt" : "0",
+            "Digest::base" : "0",
+            "bytes" : "0",
+            "parent" : "0",
+            "perl" : "5.010",
+            "strict" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Digest" : "0",
+            "Test::More" : "0",
+            "warnings" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/LoonyPandora/Digest-Bcrypt/issues"
+      },
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/LoonyPandora/Digest-Bcrypt.git",
+         "web" : "https://github.com/LoonyPandora/Digest-Bcrypt"
+      }
+   },
+   "version" : "0.1.1"
+}
+
