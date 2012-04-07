@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "Perl interface to the bcrypt algorithm",
+  "ABSTRACT" => "Perl interface to the bcrypt digest algorithm",
   "AUTHOR" => "James Aitken <jaitken\@cpan.org>",
   "BUILD_REQUIRES" => {
     "Digest" => 0,
@@ -31,7 +31,7 @@ my %WriteMakefileArgs = (
     "parent" => 0,
     "strict" => 0
   },
-  "VERSION" => "1.0.0",
+  "VERSION" => "1.0.1",
   "test" => {
     "TESTS" => "t/*.t"
   }

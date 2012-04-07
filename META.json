@@ -1,5 +1,5 @@
 {
-   "abstract" : "Perl interface to the bcrypt algorithm",
+   "abstract" : "Perl interface to the bcrypt digest algorithm",
    "author" : [
       "James Aitken <jaitken@cpan.org>"
    ],
@@ -49,6 +49,6 @@
          "web" : "https://github.com/LoonyPandora/Digest-Bcrypt"
       }
    },
-   "version" : "1.0.0"
+   "version" : "1.0.1"
 }
 
