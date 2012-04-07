@@ -7,7 +7,6 @@ Makefile.PL
 README
 lib/Digest/Bcrypt.pm
 t/001_basics.t
-t/002_create_digests.t
-t/003_methods.t
-t/004_indirect_object_creation.t
-t/005_error_handling.t
+t/002_methods.t
+t/003_create_digests.t
+t/004_error_handling.t

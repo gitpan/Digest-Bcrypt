@@ -4,7 +4,7 @@
       "James Aitken <jaitken@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300013, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Dist::Zilla version 4.300014, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -26,7 +26,7 @@
             "Digest::base" : "0",
             "bytes" : "0",
             "parent" : "0",
-            "perl" : "5.010",
+            "perl" : "5.006",
             "strict" : "0"
          }
       },
@@ -49,6 +49,6 @@
          "web" : "https://github.com/LoonyPandora/Digest-Bcrypt"
       }
    },
-   "version" : "0.1.1"
+   "version" : "1.0.0"
 }
 
